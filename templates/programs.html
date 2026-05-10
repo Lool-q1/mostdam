@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البرامج والفعاليات | مستدام</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { 
+            --primary-green: #76b852; 
+            --dark-forest: #102a1d; 
+            --white: #ffffff;
+        }
+        
+        body { font-family: 'Almarai', sans-serif; background-color: #f8faf9; margin: 0; direction: rtl; }
+
+        .custom-header {
+            background: linear-gradient(rgba(16, 42, 29, 0.95), rgba(16, 42, 29, 0.95));
+            padding: 20px 20px 80px 20px; /* تقليل الهوامش الجانبية للجوال */
+            color: white;
+            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+        }
+
+        @media (min-width: 768px) {
+            .custom-header { padding: 20px 60px 80px 60px; }
+        }
+
+        .nav-container { 
+            display: flex; 
+            flex-direction: column; /* عمودي في الجوال */
+            gap: 20px;
+            align-items: center; 
+        }
+
+        @media (min-width: 992px) {
+            .nav-container { flex-direction: row; justify-content: space-between; }
+        }
+
+        .nav-right-group { 
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            gap: 15px; 
+        }
+
+        @media (min-width: 768px) {
+            .nav-right-group { flex-direction: row; gap: 45px; }
+        }
+
+        .logo-img { height: 45px; }
+        .nav-menu { list-style: none; display: flex; gap: 15px; margin: 0; padding: 0; flex-wrap: wrap; justify-content: center; }
+        .nav-menu a { color: white; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.3s; }
+        .nav-menu a:hover, .nav-menu a.active { color: var(--primary-green); }
+
+        .nav-left-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .btn-profile { 
+            background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); 
+            color: white; border-radius: 50px; padding: 6px 14px; font-weight: 700; text-decoration: none;
+            display: flex; align-items: center; gap: 8px; font-size: 0.85rem;
+        }
+        .btn-exit { background: var(--primary-green); color: white; border-radius: 50px; padding: 6px 18px; font-weight: 700; text-decoration: none; font-size: 0.85rem; }
+
+        .hero-text { text-align: center; margin-top: 30px; }
+        .hero-text h1 { font-weight: 800; font-size: 2rem; } /* حجم أصغر للجوال */
+        @media (min-width: 768px) { .hero-text h1 { font-size: 3rem; } }
+        .hero-text span { color: var(--primary-green); }
+
+        .programs-section { padding: 20px; margin-top: -30px; position: relative; z-index: 10; }
+        
+        .program-card {
+            background: white; border-radius: 15px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee;
+            height: 100%; transition: 0.3s; display: flex; flex-direction: column;
+        }
+        .program-card:hover { transform: translateY(-8px); }
+        .card-img-top { height: 140px; background: #f0f4f2; display: flex; align-items: center; justify-content: center; color: var(--primary-green); }
+        .card-body { padding: 20px; text-align: right; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-title { font-weight: 800; color: var(--dark-forest); font-size: 1.1rem; }
+        
+        .event-info { font-size: 0.8rem; color: #666; margin-bottom: 15px; }
+        .event-info i { color: var(--primary-green); width: 18px; }
+
+        .empty-msg {
+            background: white; padding: 40px 20px; border-radius: 20px;
+            border: 2px dashed #ddd; text-align: center;
+        }
+        @media (min-width: 768px) { .empty-msg { padding: 80px; } }
+
+        /* تعديل المودال للجوال */
+        @media (max-width: 576px) {
+            .modal-dialog { margin: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="custom-header">
+        <div class="nav-container">
+            <div class="nav-right-group">
+                <img src="/static/logo1.png" alt="مستدام" class="logo-img"> 
+                <ul class="nav-menu">
+                    <li><a href="/">الرئيسية</a></li>
+                    <li><a href="/programs" class="active">البرامج والفعاليات</a></li> 
+                    <li><a href="/store">المتجر</a></li>
+                </ul>
+            </div>
+            <div class="nav-left-group">
+                <a href="/profile" class="btn-profile"> <i class="fas fa-user-circle"></i> الملف الشخصي</a>
+                <a href="/logout" class="btn-exit">خروج</a>
+            </div>
+        </div>
+        <div class="hero-text">
+            <h1>برامجنا <span>لمستقبل أفضل</span></h1>
+        </div>
+    </header>
+
+    <section class="programs-section container">
+        <div class="row g-4">
+            {% for event in events %}
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="program-card">
+                    <div class="card-img-top">
+                        <i class="fas fa-calendar-check fa-3x opacity-25"></i>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ event[1] }}</h5>
+                        <p class="text-muted small flex-grow-1">{{ event[2] }}</p>
+                        
+                        <div class="event-info">
+                            <div class="mb-1"><i class="fas fa-clock"></i> {{ event[3] }}</div>
+                            <div><i class="fas fa-map-marker-alt"></i> {{ event[4] }}</div>
+                        </div>
+
+                        <button class="btn btn-success w-100 mt-auto rounded-pill fw-bold py-2" 
+                                onclick="openRegisterModal('{{ event[0] }}', '{{ event[1] }}')">
+                            سجل الآن
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="col-12 text-center">
+                <div class="empty-msg">
+                    <i class="fas fa-calendar-minus fa-3x mb-3 text-muted"></i>
+                    <h3>لا توجد فعاليات حالياً</h3>
+                    <p class="text-muted">نحن نخطط لمبادرات رائعة، كونوا بالقرب!</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-success text-white">
+                    <h6 class="modal-title">التسجيل في: <span id="displayEventName"></span></h6>
+                    <button type="button" class="btn-close btn-close-white ms-0" data-bs-dismiss="modal"></button>
+                </div>
+                <form action="/register_event" method="POST">
+                    <div class="modal-body p-4 text-end">
+                        <input type="hidden" name="event_id" id="event_id">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small">الاسم الكامل</label>
+                            <input type="text" class="form-control form-control-sm" value="{{ session.user_name }}" readonly>
+                        </div>
+                        <p class="text-muted" style="font-size: 0.75rem;">سيتم إضافة هذه الفعالية تلقائياً إلى أجندتك الخاصة فور التأكيد.</p>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="submit" class="btn btn-success w-100 fw-bold py-2">تأكيد الانضمام</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function openRegisterModal(id, name) {
+            document.getElementById('event_id').value = id;
+            document.getElementById('displayEventName').innerText = name;
+            var myModal = new bootstrap.Modal(document.getElementById('registerModal'));
+            myModal.show();
+        }
+    </script>
+</body>
+</html>

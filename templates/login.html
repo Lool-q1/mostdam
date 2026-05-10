@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | مستدام</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root { 
+            --primary-green: #76b852; 
+            --dark-navy: #2c3e50; 
+            --dark-forest: #102a1d;
+            --soft-bg: #f4f7f6;
+            --modal-green: #406343;
+        }
+        
+        body {
+            font-family: 'Almarai', sans-serif;
+            background: var(--soft-bg);
+            min-height: 100vh; /* تغيير إلى min-height لضمان عدم القص في الشاشات الصغيرة */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px; /* زيادة العرض الأقصى قليلاً للتوازن */
+            text-align: center;
+            position: relative;
+        }
+
+        /* تعديلات الشاشات الصغيرة (الجوال) */
+        @media (max-width: 576px) {
+            body { padding: 10px; }
+            .login-card { 
+                padding: 30px 20px; 
+                border-radius: 15px; 
+            }
+            .hero-logo { width: 65px !important; }
+            h4 { font-size: 1.2rem; }
+            .close-btn { top: 15px; right: 15px; width: 30px; height: 30px; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 35px;
+            height: 35px;
+            background: #eee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            text-decoration: none;
+            transition: 0.3s;
+            z-index: 10;
+        }
+        .close-btn:hover { background: #ddd; transform: rotate(90deg); }
+
+        .btn-submit {
+            background: var(--primary-green);
+            color: white;
+            width: 100%;
+            border-radius: 10px;
+            padding: 14px; /* زيادة مساحة الضغط للجوال */
+            border: none;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .btn-submit:hover {
+            background: #5ea343;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .text-green { color: var(--primary-green); text-decoration: none; font-weight: bold; }
+        .back-home { display: block; margin-top: 20px; color: #8898aa; text-decoration: none; font-size: 0.9rem; }
+        
+        .input-group-text {
+            background-color: white;
+            border-right: none;
+            color: #8898aa;
+            border-radius: 10px 0 0 10px;
+            cursor: pointer;
+        }
+
+        .form-control { border-radius: 10px; padding: 12px; font-size: 16px !important; /* لمنع الزووم التلقائي في الآيفون */ }
+        #loginPass { border-left: none; border-radius: 0 10px 10px 0; }
+
+        /* نافذة التنبيه المخصصة */
+        .custom-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .custom-modal {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            border: 3px solid var(--primary-green);
+        }
+    </style>
+</head>
+<body>
+
+<div class="custom-modal-overlay" id="modalOverlay">
+    <div class="custom-modal">
+        <div class="modal-icon" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 10px;"><i class="fas fa-leaf"></i></div>
+        <div class="modal-title" id="modalTitle" style="font-weight: 800; margin-bottom: 10px;">تنبيه</div>
+        <div class="modal-body" id="modalMessage" style="color: #666; margin-bottom: 20px;">
+            يرجى التأكد من كتابة البريد الإلكتروني وكلمة المرور بشكل صحيح.
+        </div>
+        <button class="modal-btn" onclick="closeModal()" style="background: var(--modal-green); color: white; border: none; padding: 10px; border-radius: 20px; width: 100%; font-weight: 700;">حسناً</button>
+    </div>
+</div>
+
+<div class="login-card">
+    <a href="/" class="close-btn" title="إلغاء">
+        <i class="fas fa-times"></i>
+    </a>
+
+    <a href="/">
+        <img src="{{ url_for('static', filename='logo1.png') }}" class="hero-logo" alt="مستدام" style="width: 80px; margin-bottom: 15px;" onerror="this.style.display='none'">
+    </a>
+    
+    <h4 class="fw-bold mb-4">مرحباً بك في مستدام</h4>
+
+    <form id="loginForm" action="/login" method="POST">
+        <div class="mb-3">
+            <input type="email" id="userEmail" name="email" class="form-control text-end" placeholder="البريد الإلكتروني" required>
+        </div>
+        
+        <div class="mb-3">
+            <div class="input-group" dir="ltr">
+                <span class="input-group-text" onclick="togglePassword()">
+                    <i class="fas fa-eye" id="toggleIcon"></i>
+                </span>
+                <input type="password" id="loginPass" name="password" class="form-control text-end" placeholder="كلمة المرور" required>
+            </div>
+        </div>
+        
+        <button type="submit" class="btn btn-submit">دخول</button>
+    </form>
+
+    <p class="mt-4 small">ليس لديك حساب؟ <a href="/signup" class="text-green">سجل الآن</a></p>
+    <a href="/" class="back-home">← العودة للرئيسية</a>
+</div>
+
+<script>
+    function togglePassword() {
+        const passInput = document.getElementById('loginPass');
+        const icon = document.getElementById('toggleIcon');
+        if (passInput.type === 'password') {
+            passInput.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            passInput.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+
+    function closeModal() {
+        document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    function showModal(msg) {
+        document.getElementById('modalMessage').innerText = msg;
+        document.getElementById('modalOverlay').style.display = 'flex';
+    }
+</script>
+
+</body>
+</html>
