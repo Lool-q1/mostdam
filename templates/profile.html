@@ -24,7 +24,6 @@
             transition: 0.3s;
         }
         
-        /* زر القائمة للجوال (يظهر فقط في الشاشات الصغيرة) */
         .mobile-toggle {
             display: none;
             position: fixed;
@@ -54,17 +53,15 @@
         .card-custom { background: white; border-radius: 15px; padding: 20px; border: 1px solid #ececec; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
         .section-title { font-weight: 800; color: var(--dark-forest); margin-bottom: 20px; font-size: 1.1rem; }
 
-        /* --- تعديلات الشاشات الصغيرة (الجوال) --- */
         @media (max-width: 992px) {
-            .mobile-toggle { display: block; } /* إظهار زر القائمة */
-            .sidebar { right: -100%; } /* إخفاء القائمة الجانبية افتراضياً */
+            .mobile-toggle { display: block; } 
+            .sidebar { right: -100%; } 
             .sidebar.active { right: 0; box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
-            .main-content { margin-right: 0; padding-top: 70px; } /* إزالة الهامش وإضافة مساحة للزر */
+            .main-content { margin-right: 0; padding-top: 70px; } 
             .welcome-card { text-align: center; justify-content: center; }
             .welcome-card h2 { font-size: 1.2rem; }
         }
 
-        /* غطاء خلفي عند فتح القائمة في الجوال */
         .overlay {
             display: none;
             position: fixed;
@@ -176,7 +173,6 @@
     </div>
 
     <script>
-        // دالة لإظهار وإخفاء القائمة في الجوال
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
@@ -189,7 +185,6 @@
             document.getElementById(id).classList.add('active');
             btn.classList.add('active');
 
-            // إغلاق القائمة تلقائياً بعد اختيار القسم في الجوال
             if (window.innerWidth <= 992) {
                 toggleSidebar();
             }

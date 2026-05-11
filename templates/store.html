@@ -18,6 +18,7 @@
         
         body { font-family: 'Almarai', sans-serif; background-color: #f8faf9; margin: 0; direction: rtl; }
 
+        /* الهيدر المتطور */
         .custom-header {
             background: linear-gradient(rgba(16, 42, 29, 0.95), rgba(16, 42, 29, 0.95));
             padding: 20px 60px 80px 60px;
@@ -44,6 +45,7 @@
         .hero-text h1 { font-weight: 800; font-size: 3rem; }
         .hero-text span { color: var(--primary-green); }
 
+        /* قسم المنتجات */
         .shop-section { padding: 40px 20px; margin-top: -30px; }
         
         .product-card {
@@ -126,7 +128,6 @@
         </div>
     </section>
 
-    <!-- Modal (سلة المشتريات) -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -134,8 +135,9 @@
                     <h5 class="modal-title">سلة المشتريات</h5>
                     <button type="button" class="btn-close ms-0" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body text-end">
-                    <ul id="cartItemsList" class="list-group mb-3"></ul>
+                <div class="modal-body">
+                    <ul id="cartItemsList" class="list-group mb-3 text-end">
+                        </ul>
                     <div class="d-flex justify-content-between fw-bold p-2">
                         <span>الإجمالي:</span>
                         <span><span id="totalPrice">0</span> ر.س</span>
@@ -170,7 +172,9 @@
         }
 
         function updateUI() {
+            // تحديث عدد العناصر في الأيقونة
             document.getElementById('cartCount').innerText = cart.length;
+            // تحديث السعر الإجمالي
             document.getElementById('totalPrice').innerText = total;
             
             const list = document.getElementById('cartItemsList');
@@ -187,7 +191,7 @@
                         <span>${item.name}</span>
                         <span>
                             <span class="badge bg-light text-dark me-2">${item.price} ر.س</span>
-                            <button type="button" class="btn btn-sm text-danger" onclick="removeFromCart(${index})">
+                            <button class="btn btn-sm text-danger" onclick="removeFromCart(${index})">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </span>`;
@@ -195,6 +199,8 @@
                 });
                 document.getElementById('checkoutBtn').disabled = false;
             }
+
+            // تحويل البيانات لنص JSON لإرسالها للبايثون
             document.getElementById('cartDataInput').value = JSON.stringify(cart);
         }
     </script>

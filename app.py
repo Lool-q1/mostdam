@@ -6,15 +6,18 @@ import json
 app = Flask(__name__)
 app.secret_key = 'mostdam_2026'
 
+# إعدادات أمان إضافية للجلسة (Sessions)
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
+
 # --- 1. إعداد قاعدة البيانات بشكل ديناميكي ---
-# استخدام absolute path يضمن وصول ريندر للملف بغض النظر عن مجلد التشغيل
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'platform.db')
 
 def get_db_connection():
     """دالة لفتح اتصال بقاعدة البيانات مع دعم الوصول للبيانات كقاموس"""
     conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row  # تتيح لك الوصول للبيانات بالأسماء: user['full_name']
+    conn.row_factory = sqlite3.Row
     return conn
 
 def init_db():
@@ -80,7 +83,6 @@ def init_db():
     conn.commit()
     conn.close()
 
-# تهيئة الجداول عند تشغيل السيرفر
 init_db()
 
 # --- 2. مسارات النظام (Routes) ---
@@ -92,7 +94,8 @@ def index():
 
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
-    email = request.form.get('subscriber_email')
+    # تنظيف الإيميل من المسافات الزائدة
+    email = request.form.get('subscriber_email', '').strip()
     if email:
         conn = get_db_connection()
         cursor = conn.cursor()
@@ -112,37 +115,64 @@ def subscribe():
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        full_name = request.form.get('full_name')
-        email = request.form.get('email')
-        password = request.form.get('password')
+        name = request.form.get('full_name', '').strip()
+        email = request.form.get('email', '').strip().lower()
+        city = request.form.get('city', '').strip()   
+        phone = request.form.get('phone', '').strip() 
+        password = request.form.get('password', '')
+
         conn = get_db_connection()
         cursor = conn.cursor()
+        
         try:
-            cursor.execute('INSERT INTO users (full_name, email, password) VALUES (?, ?, ?)', (full_name, email, password))
+            # 1. إدخال البيانات في القاعدة
+            cursor.execute("INSERT INTO users (full_name, email, phone, city, password) VALUES (?, ?, ?, ?, ?)", 
+               (name, email, phone, city, password))
+            
+            # 2. جلب ID المستخدم الذي تم إنشاؤه للتو
+            user_id = cursor.lastrowid
+            
             conn.commit()
-            return redirect(url_for('login'))
-        except:
-            return "<script>alert('الايميل مسجل مسبقاً'); window.location.href='/signup';</script>"
-        finally: 
             conn.close()
+            
+            # 3. الربط السحري: تسجيل دخول المستخدم تلقائياً
+            session['user_id'] = user_id
+            session['user_name'] = name
+            
+            # 4. التوجيه فوراً للصفحة الرئيسية
+            return redirect(url_for('index'))
+            
+        except sqlite3.IntegrityError:
+            if conn: conn.close()
+            return redirect(url_for('signup', status='exists'))
+        except Exception:
+            if conn: conn.close()
+            return redirect(url_for('signup', status='error'))
+
     return render_template('signup.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form.get('email')
-        password = request.form.get('password')
+        email = request.form.get('email', '').lower().strip()
+        password = request.form.get('password', '')
+        
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE email=? AND password=?", (email, password))
-        user = cursor.fetchone()
+        
+        # البحث في القاعدة: إذا وجدت البيانات يدخل، وإذا لم توجد يرفض
+        user = cursor.execute("SELECT * FROM users WHERE email=? AND password=?", 
+                              (email, password)).fetchone()
         conn.close()
+        
         if user:
             session['user_id'] = user['id']
             session['user_name'] = user['full_name']
             return redirect(url_for('index'))
+        else:
+            return redirect(url_for('login', error='wrong_creds'))
+            
     return render_template('login.html')
-
 @app.route('/store')
 def store():
     conn = get_db_connection()
@@ -156,6 +186,8 @@ def store():
 def checkout():
     if 'user_id' not in session: return redirect(url_for('login'))
     cart_data = request.form.get('cart_data')
+    if not cart_data: return redirect(url_for('store'))
+    
     items = json.loads(cart_data)
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -209,6 +241,6 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    # دعم الـ PORT الخاص بريندر والتشغيل المحلي
+    # دعم PORT الخاص بالاستضافة والتشغيل المحلي مع تفعيل وضع التطوير (debug=True) لرؤية الأخطاء
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=True)
