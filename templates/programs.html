@@ -20,86 +20,65 @@
 
         .custom-header {
             background: linear-gradient(rgba(16, 42, 29, 0.95), rgba(16, 42, 29, 0.95));
-            padding: 20px 20px 80px 20px; 
+            padding: 20px 60px 80px 60px;
             color: white;
             clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
         }
 
-        @media (min-width: 768px) {
-            .custom-header { padding: 20px 60px 80px 60px; }
-        }
-
-        .nav-container { 
-            display: flex; 
-            flex-direction: column; 
-            gap: 20px;
-            align-items: center; 
-        }
-
-        @media (min-width: 992px) {
-            .nav-container { flex-direction: row; justify-content: space-between; }
-        }
-
-        .nav-right-group { 
-            display: flex; 
-            flex-direction: column;
-            align-items: center; 
-            gap: 15px; 
-        }
-
-        @media (min-width: 768px) {
-            .nav-right-group { flex-direction: row; gap: 45px; }
-        }
-
-        .logo-img { height: 45px; }
-        .nav-menu { list-style: none; display: flex; gap: 15px; margin: 0; padding: 0; flex-wrap: wrap; justify-content: center; }
-        .nav-menu a { color: white; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: 0.3s; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; }
+        .nav-right-group { display: flex; align-items: center; gap: 45px; }
+        .logo-img { height: 50px; }
+        .nav-menu { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
+        .nav-menu a { color: white; text-decoration: none; font-weight: 700; font-size: 1rem; transition: 0.3s; }
         .nav-menu a:hover, .nav-menu a.active { color: var(--primary-green); }
+        .nav-left-group { display: flex; align-items: center; gap: 15px; }
 
-        .nav-left-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
         .btn-profile { 
             background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.3); 
-            color: white; border-radius: 50px; padding: 6px 14px; font-weight: 700; text-decoration: none;
-            display: flex; align-items: center; gap: 8px; font-size: 0.85rem;
+            color: white; border-radius: 50px; padding: 6px 14px; font-weight: 700; text-decoration: none; font-size: 1rem;
         }
-        .btn-exit { background: var(--primary-green); color: white; border-radius: 50px; padding: 6px 18px; font-weight: 700; text-decoration: none; font-size: 0.85rem; }
+        .btn-exit { background: var(--primary-green); color: white; border-radius: 50px; padding: 7px 22px; font-weight: 700; text-decoration: none; }
 
         .hero-text { text-align: center; margin-top: 30px; }
-        .hero-text h1 { font-weight: 800; font-size: 2rem; } 
-        @media (min-width: 768px) { .hero-text h1 { font-size: 3rem; } }
+        .hero-text h1 { font-weight: 800; font-size: 3rem; }
         .hero-text span { color: var(--primary-green); }
 
         .programs-section { padding: 20px; margin-top: -30px; position: relative; z-index: 10; }
-        
         .program-card {
-            background: white; border-radius: 15px; overflow: hidden;
+            background: white; border-radius: 20px; overflow: hidden;
             box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee;
             height: 100%; transition: 0.3s; display: flex; flex-direction: column;
         }
         .program-card:hover { transform: translateY(-8px); }
-        .card-img-top { height: 140px; background: #f0f4f2; display: flex; align-items: center; justify-content: center; color: var(--primary-green); }
-        .card-body { padding: 20px; text-align: right; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-title { font-weight: 800; color: var(--dark-forest); font-size: 1.1rem; }
-        
-        .event-info { font-size: 0.8rem; color: #666; margin-bottom: 15px; }
-        .event-info i { color: var(--primary-green); width: 18px; }
 
-        .empty-msg {
-            background: white; padding: 40px 20px; border-radius: 20px;
-            border: 2px dashed #ddd; text-align: center;
-        }
-        @media (min-width: 768px) { .empty-msg { padding: 80px; } }
+        .program-card.expired { opacity: 0.7; filter: grayscale(0.5); }
+        .program-card.expired .btn-reg { background: #adb5bd !important; cursor: not-allowed; }
 
-        /* تعديل المودال للجوال */
-        @media (max-width: 576px) {
-            .modal-dialog { margin: 10px; }
+        .card-img-top { height: 200px; background: #f0f4f2; position: relative; }
+        .card-img-top img { width: 100%; height: 100%; object-fit: cover; }
+        .badge-type { position: absolute; top: 15px; right: 15px; background: var(--primary-green); color: white; padding: 4px 15px; border-radius: 50px; font-size: 0.75rem; font-weight: bold; }
+
+        .card-body { padding: 20px; text-align: center; flex-grow: 1; }
+        .card-title { font-weight: 800; color: var(--dark-forest); font-size: 1.1rem; margin-bottom: 15px; }
+
+        .event-info-box {
+            background: #fdfdfd; border: 1px dashed #ddd; border-radius: 12px;
+            padding: 10px; margin-bottom: 20px; font-size: 0.85rem; color: #555; text-align: right;
         }
+        .info-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .info-item i { color: var(--primary-green); width: 18px; text-align: center; }
+
+        .card-actions { display: flex; gap: 10px; justify-content: center; }
+        .btn-detail { background: #f0f4f2; color: var(--dark-forest); border: 1px solid #ddd; border-radius: 12px; padding: 8px 15px; font-weight: 700; font-size: 0.85rem; flex: 1; }
+        .btn-reg { background: var(--primary-green); color: white; border: none; border-radius: 12px; padding: 8px 15px; font-weight: 700; font-size: 0.85rem; flex: 1; }
+
+        .topic-item { background: #f8faf9; border-right: 4px solid var(--primary-green); padding: 12px; margin-bottom: 10px; border-radius: 8px; font-weight: 600; text-align: right; }
     </style>
 </head>
 <body>
 
     <header class="custom-header">
-        <div class="nav-container">
+        <div class="nav-container container">
             <div class="nav-right-group">
                 <img src="/static/logo1.png" alt="مستدام" class="logo-img"> 
                 <ul class="nav-menu">
@@ -109,8 +88,9 @@
                 </ul>
             </div>
             <div class="nav-left-group">
+            
                 <a href="/profile" class="btn-profile"> <i class="fas fa-user-circle"></i> الملف الشخصي</a>
-                <a href="/logout" class="btn-exit">خروج</a>
+                <a href="/logout" class="btn-exit">تسجيل خروج</a>
             </div>
         </div>
         <div class="hero-text">
@@ -119,72 +99,143 @@
     </header>
 
     <section class="programs-section container">
-        <div class="row g-4">
-            {% for event in events %}
-            <div class="col-12 col-md-6 col-lg-4">
-                <div class="program-card">
+        <div class="row g-4" id="programsContainer">
+            <div class="col-12 col-md-6 col-lg-4" id="card-1">
+                <div class="program-card" id="inner-card-1">
                     <div class="card-img-top">
-                        <i class="fas fa-calendar-check fa-3x opacity-25"></i>
+                        <span class="badge-type">ورشة عمل</span>
+                        <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=500" alt="الاستدامة">
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ event[1] }}</h5>
-                        <p class="text-muted small flex-grow-1">{{ event[2] }}</p>
-                        
-                        <div class="event-info">
-                            <div class="mb-1"><i class="fas fa-clock"></i> {{ event[3] }}</div>
-                            <div><i class="fas fa-map-marker-alt"></i> {{ event[4] }}</div>
+                        <h5 class="card-title">الاستدامة المالية وبناء مستقبل اقتصادي</h5>
+                        <div class="event-info-box">
+                            <div class="info-item"><i class="fas fa-calendar-day"></i><span>الأربعاء، 13 مايو 2026</span></div>
+                            <div class="info-item"><i class="fas fa-clock"></i><span>07:00 مساءً</span></div>
+                            <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>عبر مساحة (X)</span></div>
                         </div>
-
-                        <button class="btn btn-success w-100 mt-auto rounded-pill fw-bold py-2" 
-                                onclick="openRegisterModal('{{ event[0] }}', '{{ event[1] }}')">
-                            سجل الآن
-                        </button>
+                        <div class="card-actions">
+                            <button class="btn-detail" onclick="showDetails('1')">التفاصيل</button>
+                            <button class="btn-reg" id="btn-reg-1" onclick="openRegisterModal('1', 'الاستدامة المالية')">سجل الآن</button>
+                        </div>
                     </div>
                 </div>
             </div>
-            {% else %}
-            <div class="col-12 text-center">
-                <div class="empty-msg">
-                    <i class="fas fa-calendar-minus fa-3x mb-3 text-muted"></i>
-                    <h3>لا توجد فعاليات حالياً</h3>
-                    <p class="text-muted">نحن نخطط لمبادرات رائعة، كونوا بالقرب!</p>
-                </div>
-            </div>
-            {% endfor %}
         </div>
     </section>
 
-    <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-success text-white">
-                    <h6 class="modal-title">التسجيل في: <span id="displayEventName"></span></h6>
+            <div class="modal-content" style="border-radius: 20px;">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title" id="detailTitle"></h5>
                     <button type="button" class="btn-close btn-close-white ms-0" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="/register_event" method="POST">
-                    <div class="modal-body p-4 text-end">
-                        <input type="hidden" name="event_id" id="event_id">
-                        <div class="mb-3">
-                            <label class="form-label fw-bold small">الاسم الكامل</label>
-                            <input type="text" class="form-control form-control-sm" value="{{ session.user_name }}" readonly>
-                        </div>
-                        <p class="text-muted" style="font-size: 0.75rem;">سيتم إضافة هذه الفعالية تلقائياً إلى أجندتك الخاصة فور التأكيد.</p>
-                    </div>
-                    <div class="modal-footer border-0">
-                        <button type="submit" class="btn btn-success w-100 fw-bold py-2">تأكيد الانضمام</button>
-                    </div>
-                </form>
+                <div class="modal-body p-4"><div id="detailContent"></div></div>
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content text-center p-4" id="regModalContent" style="border-radius: 20px;"></div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // استخدام الرقم 1 كمعرف أساسي للورشة
+        const workshopData = {
+            '1': {
+                title: "محاور ورشة الاستدامة المالية",
+                trainer: "أماني الزميلي",
+                guest: "حمزة العمري",
+                whatsapp: "https://chat.whatsapp.com/XXXX", 
+                expiryDate: new Date(2026, 4, 13, 19, 0), // 13 مايو 2026
+                topics: ["الوعي المالي الحديث", "بناء مصادر دخل مستدامة", "الفرص المستقبلية في السعودية", "خطوات عملية"]
+            }
+        };
+
+        function checkExpirations() {
+            const now = new Date();
+            for (let id in workshopData) {
+                const data = workshopData[id];
+                const btn = document.getElementById(`btn-reg-${id}`);
+                const card = document.getElementById(`inner-card-${id}`);
+
+                if (now > data.expiryDate) {
+                    if (btn) {
+                        btn.innerText = "انتهى التسجيل";
+                        btn.disabled = true;
+                        btn.onclick = null;
+                    }
+                    if (card) {
+                        card.classList.add('expired');
+                    }
+                }
+            }
+        }
+
+        window.onload = checkExpirations;
+
+        function showDetails(id) {
+            const data = workshopData[id];
+            let html = `<h6 class="fw-bold mb-3" style="color: #28a745; text-align: right;">ماذا سنناقش؟</h6>`;
+            data.topics.forEach(topic => {
+                html += `<div class="topic-item"><span>${topic}</span><i class="fas fa-check text-success ms-2"></i></div>`;
+            });
+            document.getElementById('detailContent').innerHTML = html;
+            document.getElementById('detailTitle').innerText = data.title;
+            new bootstrap.Modal(document.getElementById('detailsModal')).show();
+        }
+
         function openRegisterModal(id, name) {
-            document.getElementById('event_id').value = id;
-            document.getElementById('displayEventName').innerText = name;
-            var myModal = new bootstrap.Modal(document.getElementById('registerModal'));
-            myModal.show();
+            if (new Date() > workshopData[id].expiryDate) {
+                alert("عذراً، انتهى وقت التسجيل في هذه الورشة.");
+                return;
+            }
+
+            const container = document.getElementById('regModalContent');
+            container.innerHTML = `
+                <div class="mb-3"><i class="fas fa-question-circle fa-3x text-primary"></i></div>
+                <h5 class="fw-bold">${name}</h5>
+                <p class="small text-muted">هل ترغب في تأكيد تسجيلك؟</p>
+                <button type="button" class="btn-reg w-100 py-2" onclick="processRegistration('${id}', '${name}')">تأكيد الانضمام</button>
+            `;
+            new bootstrap.Modal(document.getElementById('registerModal')).show();
+        }
+
+        function processRegistration(id, name) {
+            const params = new URLSearchParams();
+            params.append('event_id', id);
+
+            fetch('/register_event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: params.toString()
+            })
+            .then(response => {
+                if (response.ok) {
+                    const data = workshopData[id];
+                    const container = document.getElementById('regModalContent');
+                    container.innerHTML = `
+                        <div class="mb-3"><i class="fas fa-check-circle fa-4x text-success"></i></div>
+                        <h5 class="fw-bold">تم تسجيلك بنجاح!</h5>
+                        <p class="small text-muted">تمت إضافة الورشة إلى أجندتك.</p>
+                        <a href="${data.whatsapp}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: #25D366; color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
+                            <i class="fab fa-whatsapp me-2"></i> دخول مجموعة الواتساب
+                        </a>
+                        <button type="button" class="btn btn-link text-muted mt-2" data-bs-dismiss="modal" style="text-decoration:none">إغلاق</button>
+                    `;
+                } else {
+                    alert("يرجى تسجيل الدخول أولاً لتتمكن من التسجيل في الورشة.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("تعذر الاتصال بالسيرفر، تأكد من تشغيل تطبيق Flask.");
+            });
         }
     </script>
 </body>

@@ -105,12 +105,34 @@
         </div>
 
         <div id="home" class="content-section active">
-            <h4 class="section-title">أجندتي القادمة</h4>
-            <div class="card-custom">
-                <p class="text-muted">لا توجد فعاليات مسجلة حالياً.</p>
-                <a href="/programs" class="btn btn-success btn-sm mt-2">استعراض البرامج</a>
+    <h5 class="fw-bold mb-3" style="color: var(--dark-forest);"> أجندتي القادمة</h5>
+    <div class="card-custom mb-4">
+        {% if agenda %}
+            {% for item in agenda %}
+            <div class="p-3 mb-2 border-bottom text-end">
+                <h6 class="fw-bold text-success mb-1">{{ item[0] }}</h6>
+                <small class="text-muted">{{ item[1] }} | {{ item[2] }}</small>
             </div>
-        </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted small">لا توجد ورش قادمة حالياً.</p>
+        {% endif %}
+    </div>
+
+    <h5 class="fw-bold mb-3 text-muted"> الأجندة السابقة</h5>
+    <div class="card-custom" style="background-color: #f8f9fa;">
+        {% if past_agenda %}
+            {% for item in past_agenda %}
+            <div class="p-3 mb-2 border-bottom text-end opacity-75">
+                <h6 class="fw-bold text-secondary mb-1" style="text-decoration: line-through;">{{ item[0] }}</h6>
+                <small class="text-muted">{{ item[1] }}</small>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted small">سجل الورش المنتهية فارغ.</p>
+        {% endif %}
+    </div>
+</div>
 
         <div id="orders" class="content-section">
             <h4 class="section-title">سجل المشتريات والطلبات</h4>

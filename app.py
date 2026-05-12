@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import os
 import json
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = 'mostdam_2026'
@@ -83,7 +84,23 @@ def init_db():
     conn.commit()
     conn.close()
 
+def seed_data():
+    """إدخال بيانات أولية لضمان عمل التسجيل في الفعاليات"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    # التحقق من وجود الفعالية برقم 1 لمنع التكرار
+    check = cursor.execute("SELECT id FROM events WHERE id=1").fetchone()
+    if not check:
+        # تأكدي أن تنسيق التاريخ هنا يطابق التنسيق المستخدم في دالة datetime.strptime
+        cursor.execute('''INSERT INTO events (id, title, description, date_time, location) 
+                          VALUES (?, ?, ?, ?, ?)''', 
+                       (1, 'الاستدامة المالية وبناء مستقبل اقتصادي', 'محاور ورشة الاستدامة المالية', '2026-05-13 19:00', 'عبر مساحة (X)'))
+        conn.commit()
+    conn.close()
+
+# تهيئة القاعدة والبيانات
 init_db()
+seed_data()
 
 # --- 2. مسارات النظام (Routes) ---
 
@@ -94,7 +111,6 @@ def index():
 
 @app.route('/subscribe', methods=['POST'])
 def subscribe():
-    # تنظيف الإيميل من المسافات الزائدة
     email = request.form.get('subscriber_email', '').strip()
     if email:
         conn = get_db_connection()
@@ -123,32 +139,21 @@ def signup():
 
         conn = get_db_connection()
         cursor = conn.cursor()
-        
         try:
-            # 1. إدخال البيانات في القاعدة
             cursor.execute("INSERT INTO users (full_name, email, phone, city, password) VALUES (?, ?, ?, ?, ?)", 
                (name, email, phone, city, password))
-            
-            # 2. جلب ID المستخدم الذي تم إنشاؤه للتو
             user_id = cursor.lastrowid
-            
             conn.commit()
             conn.close()
-            
-            # 3. الربط السحري: تسجيل دخول المستخدم تلقائياً
             session['user_id'] = user_id
             session['user_name'] = name
-            
-            # 4. التوجيه فوراً للصفحة الرئيسية
             return redirect(url_for('index'))
-            
         except sqlite3.IntegrityError:
             if conn: conn.close()
             return redirect(url_for('signup', status='exists'))
         except Exception:
             if conn: conn.close()
             return redirect(url_for('signup', status='error'))
-
     return render_template('signup.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -156,23 +161,19 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email', '').lower().strip()
         password = request.form.get('password', '')
-        
         conn = get_db_connection()
         cursor = conn.cursor()
-        
-        # البحث في القاعدة: إذا وجدت البيانات يدخل، وإذا لم توجد يرفض
         user = cursor.execute("SELECT * FROM users WHERE email=? AND password=?", 
                               (email, password)).fetchone()
         conn.close()
-        
         if user:
             session['user_id'] = user['id']
             session['user_name'] = user['full_name']
             return redirect(url_for('index'))
         else:
             return redirect(url_for('login', error='wrong_creds'))
-            
     return render_template('login.html')
+
 @app.route('/store')
 def store():
     conn = get_db_connection()
@@ -209,14 +210,28 @@ def programs():
 
 @app.route('/register_event', methods=['POST'])
 def register_event():
-    if 'user_id' not in session: return redirect(url_for('login'))
+    if 'user_id' not in session:
+        return "Unauthorized", 401
+    
     event_id = request.form.get('event_id')
+    user_id = session['user_id']
+    
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO event_registrations (user_id, event_id) VALUES (?, ?)", (session['user_id'], event_id))
-    conn.commit()
+    
+    # التأكد من وجود الفعالية أولاً قبل تسجيل المستخدم فيها
+    event_exists = cursor.execute("SELECT id FROM events WHERE id=?", (event_id,)).fetchone()
+    existing_reg = cursor.execute("SELECT id FROM event_registrations WHERE user_id=? AND event_id=?", 
+                                  (user_id, event_id)).fetchone()
+
+    if event_exists and not existing_reg:
+        cursor.execute("INSERT INTO event_registrations (user_id, event_id) VALUES (?, ?)", (user_id, event_id))
+        conn.commit()
+        conn.close()
+        return "Success", 200
+    
     conn.close()
-    return "<script>alert('تم التسجيل في الفعالية'); window.location.href='/profile';</script>"
+    return "Already Registered or Event Not Found", 200
 
 @app.route('/profile')
 def profile():
@@ -227,13 +242,37 @@ def profile():
     
     user_info = cursor.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
     orders = cursor.execute("SELECT product_name, amount, order_date, status FROM orders WHERE user_id=?", (user_id,)).fetchall()
-    agenda = cursor.execute('''SELECT e.title, e.date_time, e.location 
-                              FROM events e 
-                              JOIN event_registrations r ON e.id = r.event_id 
-                              WHERE r.user_id=?''', (user_id,)).fetchall()
     
+    # جلب كل الفعاليات المسجلة بربط الجداول
+    all_events = cursor.execute('''SELECT e.title, e.date_time, e.location 
+                                  FROM events e 
+                                  JOIN event_registrations r ON e.id = r.event_id 
+                                  WHERE r.user_id=?''', (user_id,)).fetchall()
+    
+    now = datetime.now()
+    agenda = []         # الأجندة القادمة
+    past_agenda = []    # الأجندة السابقة
+    
+    for event in all_events:
+        try:
+            raw_date = event['date_time']
+            if raw_date:
+                # محاولة تحويل التاريخ (التنسيق المتوقع: 2026-05-13 19:00)
+                event_time = datetime.strptime(raw_date, '%Y-%m-%d %H:%M')
+                if event_time > now:
+                    agenda.append(event)
+                else:
+                    past_agenda.append(event)
+            else:
+                # إذا لم يوجد تاريخ، نضعها في الأجندة القادمة لضمان ظهورها
+                agenda.append(event)
+        except Exception as e:
+            # في حال وجود خطأ في التنسيق تظهر في الأجندة كاحتياط ويتم طباعة الخطأ للديبرج
+            print(f"Error parsing date for event {event['title']}: {e}")
+            agenda.append(event)
+
     conn.close()
-    return render_template('profile.html', user=user_info, orders=orders, agenda=agenda)
+    return render_template('profile.html', user=user_info, orders=orders, agenda=agenda, past_agenda=past_agenda)
 
 @app.route('/logout')
 def logout():
@@ -241,6 +280,5 @@ def logout():
     return redirect(url_for('index'))
 
 if __name__ == '__main__':
-    # دعم PORT الخاص بالاستضافة والتشغيل المحلي مع تفعيل وضع التطوير (debug=True) لرؤية الأخطاء
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
