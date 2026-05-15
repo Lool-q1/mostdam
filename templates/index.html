@@ -227,19 +227,205 @@
 <section class="achievements-section">
     <div class="container">
         <h2 class="section-title">إنجازاتنا</h2>
+        
         <div id="achievementsCarousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
+                
                 <div class="carousel-item active">
-                    <div class="row g-4">
-                        <div class="col-md-4"><div class="achievement-card"><div class="achievement-img"><i class="fas fa-trophy fa-3x"></i></div><div class="achievement-body"><h4 class="achievement-name">هاكاثون حلها</h4><p class="achievement-desc">المركز السادس في هاكاثون حلها بجامعة الملك خالد.</p></div></div></div>
-                        <div class="col-md-4"><div class="achievement-card"><div class="achievement-img"><i class="fas fa-medal fa-3x"></i></div><div class="achievement-body"><h4 class="achievement-name">يوم التأسيس</h4><p class="achievement-desc">المركز الأول في مسابقة يوم التأسيس لعام 2026.</p></div></div></div>
-                        <div class="col-md-4"><div class="achievement-card"><div class="achievement-img"><i class="fas fa-seedling fa-3x"></i></div><div class="achievement-body"><h4 class="achievement-name">أبها الخضراء</h4><p class="achievement-desc">مشاركة فعالة في مبادرة أبها الخضراء.</p></div></div></div>
-                    </div>
-                </div>
-            </div>
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='حلهاثون.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">هاكاثون حلهاثون</h4>
+                                    <p class="achievement-desc">المركز السادس في هاكاثون حلهاثون بجامعة الملك خالد.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='مسابقة_التأسيس.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">يوم التأسيس</h4>
+                                    <p class="achievement-desc">المركز الأول في مسابقة يوم التأسيس.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='أبها_الخضراء.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">أبها الخضراء</h4>
+                                    <p class="achievement-desc">مشاركة ميدانية لزيادة الغطاء النباتي في منطقة عسير .</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div> </div> <div class="carousel-item">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='هاكاثون_الاستدامة.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">هاكاثون الإستدامة</h4>
+                                    <p class="achievement-desc">الوصول إلى النهائيات في هاكاثون الإستدامة.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='الهندسة_الميكانيكية.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">ورشةالإستدامة في الهندسة الميكانيكية  </h4>
+                                    <p class="achievement-desc">دمج حلول الطاقة المتجددة في التصاميم الهندسية.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">ورشةالإستدامة في الهندسة الصناعية </h4>
+                                    <p class="achievement-desc">ورشة حول تحسين الإنتاج وتقليل الهدر.</p>
+                                </div>
+                            </div>
+                        </div>
+                        </div> </div> <div class="carousel-item">
+                    <div class="row g-4 justify-content-center">
+                    <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='أبعاد_الإستدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">ورشة أبعاد الإستدامة</h4>
+                                    <p class="achievement-desc">التعرف على ركائز الإستدامة وكيفية الموازنة بينها .</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">ورشة خطوتك نحو الإستدامة </h4>
+                                    <p class="achievement-desc">خطوات عملية وبسيطة لتبني نمط حياة صديق للبيئة.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">إطلاق مقرر علمي بكلية الهندسة  </h4>
+                                    <p class="achievement-desc">إطلاق مقرر بكلية الهندسة الصناعية بإسم (Sustainable Industrial Engineering).</p>
+                                </div>
+                            </div>
+                        </div>
+                        </div> </div> <div class="carousel-item">
+                    <div class="row g-4 justify-content-center">
+                    <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='الملتقى_العقار.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">ملتقى الإستثمار العقاري</h4>
+                                    <p class="achievement-desc">عرض حلول ومفاهيم المباني الخضراء والمستدامة .</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">ورشة إعادة التدوير</h4>طرق إبداعية لتحويل النفايات إلى موارد مفيدة .</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">ورشة الزراعة المائية  </h4>
+                                    <p class="achievement-desc">تقنيات حديثة للزراعة وبتوفير عالي للمياه.</p>
+                                </div>
+                            </div>
+                        </div>
+                        </div> </div> <div class="carousel-item">
+                    <div class="row g-4 justify-content-center">
+                    <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='أجاويد.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">مشاركة أجاويد(تطبيق المفتاح) </h4>
+                                    <p class="achievement-desc">توظيف التقنيية لتعزيز السياحة المستدامة في المنطقة  .</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="achievement-card">
+                                <div class="achievement-img">
+                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                </div>
+                                <div class="achievement-body p-3">
+                                    <h4 class="achievement-name">مبادرة إفطار مستدام </h4>
+                                    <p class="achievement-desc">حملة رمضانية لنشر ثقافة حفظ النعمه وتقليل الهدر .</p>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div> </div> </div> <button class="carousel-control-prev" type="button" data-bs-target="#achievementsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1); transform: scale(1.5);"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#achievementsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="filter: invert(1); transform: scale(1.5);"></span>
+            </button>
         </div>
     </div>
 </section>
+<style>
+ /* تنسيق الأسهم لتكون واضحة وجانبية */
+.carousel-control-prev, .carousel-control-next {
+    width: 5%;
+    opacity: 0.8;
+}
+
+/* التأكد من أن الصور تغطي المساحة المخصصة لها بالكامل وبشكل متناسق */
+.achievement-img {
+    height: 250px; /* يمكنك تعديل الطول حسب رغبتك */
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+.achievement-card {
+    transition: transform 0.3s ease;
+}
+
+.achievement-card:hover {
+    transform: translateY(-5px);
+}
+</style>
 
 <footer id="interactiveFooter">
     <div class="container">
