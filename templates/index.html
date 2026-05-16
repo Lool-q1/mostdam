@@ -156,6 +156,69 @@
         .social-icon { width: 45px; height: 45px; background: rgba(255, 255, 255, 0.05); color: white; display: flex; align-items: center; justify-content: center; border-radius: 12px; font-size: 1.2rem; transition: 0.3s; text-decoration: none; }
         .social-icon:hover { background: var(--primary-green); color: white; transform: translateY(-5px); }
         .copyright-bar { text-align: center; padding-top: 40px; margin-top: 40px; border-top: 1px solid rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.5); }
+
+        .carousel-control-prev, .carousel-control-next {
+    width: 5%;
+    opacity: 0.8;
+}
+
+/* التأكد من أن الصور تغطي المساحة المخصصة لها بالكامل وبشكل متناسق */
+.achievement-img {
+    height: 250px; /* يمكنك تعديل الطول حسب رغبتك */
+    overflow: hidden;
+    background-color: #f8f9fa;
+}
+
+.achievement-card {
+    transition: transform 0.3s ease;
+}
+
+.achievement-card:hover {
+    transform: translateY(-5px);
+}
+
+        /* --- تنسيق قسم لغة الأرقام --- */
+.stats-section {
+    padding: 60px 0;
+    background-color: var(--soft-bg); /* نفس الخلفية المريحة للعين المستخدمة في الهوية */
+}
+
+.stat-card {
+    background: white;
+    padding: 30px 20px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0f0f0;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--primary-green);
+    box-shadow: 0 15px 35px rgba(118, 184, 82, 0.1);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    color: var(--primary-green);
+    margin-bottom: 15px;
+}
+
+.stat-number {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--dark-forest);
+    line-height: 1.2;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: #666;
+    font-weight: 700;
+}
     </style>
 </head>
 <body>
@@ -282,7 +345,7 @@
                         <div class="col-md-4">
                             <div class="achievement-card">
                                 <div class="achievement-img">
-                                    <img src="{{ url_for('static', filename='الهندسة_الميكانيكية.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
                                 </div>
                                 <div class="achievement-body p-3">
                                     <h4 class="achievement-name">ورشةالإستدامة في الهندسة الميكانيكية  </h4>
@@ -293,7 +356,7 @@
                         <div class="col-md-4">
                             <div class="achievement-card">
                                 <div class="achievement-img">
-                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                    <img src="{{ url_for('static', filename='هندسة_الصناعية.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
                                 </div>
                                 <div class="achievement-body p-3">
                                     <h4 class="achievement-name">ورشةالإستدامة في الهندسة الصناعية </h4>
@@ -362,7 +425,7 @@
                         <div class="col-md-4">
                             <div class="achievement-card">
                                 <div class="achievement-img">
-                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                    <img src="{{ url_for('static', filename='الزراعة_المائية.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
                                 </div>
                                 <div class="achievement-body p-3">
                                     <h4 class="achievement-name">ورشة الزراعة المائية  </h4>
@@ -375,7 +438,7 @@
                     <div class="col-md-4">
                             <div class="achievement-card">
                                 <div class="achievement-img">
-                                    <img src="{{ url_for('static', filename='أجاويد.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
                                 </div>
                                 <div class="achievement-body p-3">
                                     <h4 class="achievement-name">مشاركة أجاويد(تطبيق المفتاح) </h4>
@@ -386,7 +449,7 @@
                         <div class="col-md-4">
                             <div class="achievement-card">
                                 <div class="achievement-img">
-                                    <img src="{{ url_for('static', filename='استدامه.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
+                                    <img src="{{ url_for('static', filename='مبادرة_افطار.png') }}" class="img-fluid w-100 h-100" style="object-fit: cover;">
                                 </div>
                                 <div class="achievement-body p-3">
                                     <h4 class="achievement-name">مبادرة إفطار مستدام </h4>
@@ -394,6 +457,7 @@
                                 </div>
                             </div>
                         </div>
+                         
                        
                     </div> </div> </div> <button class="carousel-control-prev" type="button" data-bs-target="#achievementsCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: invert(1); transform: scale(1.5);"></span>
@@ -404,28 +468,56 @@
         </div>
     </div>
 </section>
-<style>
- /* تنسيق الأسهم لتكون واضحة وجانبية */
-.carousel-control-prev, .carousel-control-next {
-    width: 5%;
-    opacity: 0.8;
-}
 
-/* التأكد من أن الصور تغطي المساحة المخصصة لها بالكامل وبشكل متناسق */
-.achievement-img {
-    height: 250px; /* يمكنك تعديل الطول حسب رغبتك */
-    overflow: hidden;
-    background-color: #f8f9fa;
-}
 
-.achievement-card {
-    transition: transform 0.3s ease;
-}
+<section class="stats-section">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number">+1000</div>
+                    <div class="stat-label">عدد المستفيدين</div>
+                </div>
+            </div>
 
-.achievement-card:hover {
-    transform: translateY(-5px);
-}
-</style>
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <div class="stat-number">+200</div>
+                    <div class="stat-label">عدد المتطوعين</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="stat-number">9</div>
+                    <div class="stat-label">الورش التدريبية والمبادرات</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">شركاء النجاح</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</section>
 
 <footer id="interactiveFooter">
     <div class="container">
@@ -460,7 +552,7 @@
                     <a href="https://x.com/mostdam_1" target="_" class="social-icon" title="منصة X">
                         <i class="fa-brands fa-x-twitter"></i>
                     </a>
-                    <a href="https://www.snapchat.com/add/YOUR_USER" target="_blank" class="social-icon" title="سناب شات">
+                    <a href="https://www.snapchat.com/@mostdam_1" target="_blank" class="social-icon" title="سناب شات">
                         <i class="fa-brands fa-snapchat"></i>
                     </a>
                     <a href="https://www.tiktok.com/@mostdam_1" target="_blank" class="social-icon" title="تيك توك">
