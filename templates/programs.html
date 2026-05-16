@@ -153,6 +153,7 @@
 
     <section class="programs-section container">
         <div class="row g-4" id="programsContainer">
+            
             <div class="col-12 col-md-6 col-lg-4" id="card-1">
                 <div class="program-card" id="inner-card-1">
                     <div class="card-img-top">
@@ -172,8 +173,30 @@
                         </div>
                     </div>
                 </div>
+            </div> 
+
+            <div class="col-12 col-md-6 col-lg-4" id="card-2">
+                <div class="program-card" id="inner-card-2">
+                    <div class="card-img-top">
+                        <span class="badge-type" style="background: #e67e22;">حفل ختامي</span>
+                        <img src="{{ url_for('static', filename='الحفل_الختامي.png') }}" alt="الحفل الختامي لمبادرة مستدام">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">الأمسية الاستثنائية والحفل الختامي لمبادرة مستدام</h5>
+                        <div class="event-info-box">
+                            <div class="info-item"><i class="fas fa-calendar-day"></i><span>الاثنين، 18 مايو 2026</span></div>
+                            <div class="info-item"><i class="fas fa-clock"></i><span>04:00 مساءً</span></div>
+                            <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>مسرح غرفة أبها</span></div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-detail" onclick="showDetails('2')">التفاصيل</button>
+                            <button class="btn-reg" id="btn-reg-2" onclick="openRegisterModal('2', 'الحفل الختامي لمبادرة مستدام')">سجل الآن</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            </div>
+
+        </div> 
     </section>
 
     <div class="modal fade" id="detailsModal" tabindex="-1" aria-hidden="true">
@@ -198,7 +221,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // دالة تغيير شكل النافبار عند السكرول (مثل الرئيسية)
+        // دالة تغيير شكل النافبار عند السكرول
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('mainNav');
             if (window.scrollY > 50) {
@@ -216,6 +239,14 @@
                 whatsapp: "https://t.co/m2QnPbUaKp", 
                 expiryDate: new Date(2026, 4, 13, 19, 0),
                 topics: ["الوعي المالي الحديث", "بناء مصادر دخل مستدامة", "الفرص المستقبلية في السعودية", "خطوات عملية لتحقيق الإستقرار المالي"]
+            },
+            '2': {
+                title: "الأمسية الاستثنائية والحفل الختامي لمبادرة مستدام",
+                trainer: "", 
+                guest: "",   
+                link: "https://mustdammm.netlify.app", 
+                expiryDate: new Date(2026, 4, 18, 16, 0), 
+                topics: ["الاحتفاء بالأثر والمحطات الملهمة للمبادرة", "استعراض حصاد موسم صناعة الإنجازات", "الكشف عن ملامح المرحلة القادمة لـ مستدام", "إطلاق انطلاقة جديدة برؤية أكثر طموحاً واستدامة"]
             }
         };
 
@@ -240,30 +271,36 @@
         function showDetails(id) {
             const data = workshopData[id];
             let html = `<h6 class="fw-bold mb-3" style="color: var(--primary-green); text-align: right;">محاور اللقاء:</h6>`;
+            
             data.topics.forEach(topic => {
                 html += `<div class="topic-item"><span>${topic}</span><i class="fas fa-check-circle text-success ms-2"></i></div>`;
             });
-            html += `<hr class="my-4">
-                <div class="row g-2">
-                    <div class="col-6">
-                        <div class="speaker-box">
-                            <i class="fas fa-chalkboard-teacher"></i>
-                            <div class="speaker-info">
-                                <small>المدربة</small>
-                                <span>${data.trainer}</span>
+            
+            // الفحص الذكي: إذا كان فيه اسم مدرب (يعني مو فارغ) اعرض مربعات الأسماء
+            if (data.trainer && data.trainer !== "") { 
+                html += `<hr class="my-4">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <div class="speaker-box">
+                                <i class="fas fa-chalkboard-teacher"></i>
+                                <div class="speaker-info">
+                                    <small>المدربة</small>
+                                    <span>${data.trainer}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="speaker-box">
-                            <i class="fas fa-microphone-lines"></i>
-                            <div class="speaker-info">
-                                <small>ضيف اللقاء</small>
-                                <span>${data.guest}</span>
+                        <div class="col-6">
+                            <div class="speaker-box">
+                                <i class="fas fa-microphone-lines"></i>
+                                <div class="speaker-info">
+                                    <small>ضيف اللقاء</small>
+                                    <span>${data.guest}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>`;
+                    </div>`;
+            }
+            
             document.getElementById('detailContent').innerHTML = html;
             document.getElementById('detailTitle').innerText = data.title;
             new bootstrap.Modal(document.getElementById('detailsModal')).show();
@@ -297,12 +334,13 @@
                 if (response.ok) {
                     const data = workshopData[id];
                     const container = document.getElementById('regModalContent');
+                    
                     container.innerHTML = `
                         <div class="mb-3"><i class="fas fa-check-circle fa-4x text-success"></i></div>
                         <h5 class="fw-bold">تم تسجيلك بنجاح!</h5>
-                        <p class="small text-muted">تمت إضافة الورشة إلى أجندتك.</p>
-                        <a href="${data.whatsapp}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: #25D366; color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
-                            <i class="fab fa-whatsapp me-2"></i> دخول مجموعة الواتساب
+                        <p class="small text-muted">تمت إضافة الفعالية إلى أجندتك.</p>
+                        <a href="${data.whatsapp}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: var(--primary-green); color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
+                             لتأكيد الحضور
                         </a>
                         <button type="button" class="btn btn-link text-muted mt-2" data-bs-dismiss="modal" style="text-decoration:none">إغلاق</button>
                     `;
