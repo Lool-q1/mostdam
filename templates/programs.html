@@ -244,7 +244,7 @@
                 title: "الأمسية الاستثنائية والحفل الختامي لمبادرة مستدام",
                 trainer: "", 
                 guest: "",   
-                link: "https://mustdammm.netlify.app", // 
+                link: "https://mustdammm.netlify.app", 
                 expiryDate: new Date(2026, 4, 18, 16, 0), 
                 topics: ["الاحتفاء بالأثر والمحطات الملهمة للمبادرة", "استعراض حصاد موسم صناعة الإنجازات", "الكشف عن ملامح المرحلة القادمة لـ مستدام", "إطلاق انطلاقة جديدة برؤية أكثر طموحاً واستدامة"]
             }
@@ -268,6 +268,7 @@
 
         window.onload = checkExpirations;
 
+        // 🟢 التعديل الصحيح والمحسّن لدالة التفاصيل هنا:
         function showDetails(id) {
             const data = workshopData[id];
             let html = `<h6 class="fw-bold mb-3" style="color: var(--primary-green); text-align: right;">محاور اللقاء:</h6>`;
@@ -276,8 +277,8 @@
                 html += `<div class="topic-item"><span>${topic}</span><i class="fas fa-check-circle text-success ms-2"></i></div>`;
             });
             
-            // الفحص الذكي: إذا كان فيه اسم مدرب (يعني مو فارغ) اعرض مربعات الأسماء
-            if (data.trainer && data.trainer !== "") { 
+            // الفحص الدقيق: لا يتم إنشاء خط الفصل أو صف البوتستراب إلا إذا وجد اسم مدرب فعلي
+            if (data.trainer && data.trainer.trim() !== "") { 
                 html += `<hr class="my-4">
                     <div class="row g-2">
                         <div class="col-6">
@@ -288,8 +289,11 @@
                                     <span>${data.trainer}</span>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-6">
+                        </div>`;
+                
+                // فحص صندوق ضيف اللقاء وبناؤه بشكل مستقل داخل نفس الصف
+                if (data.guest && data.guest.trim() !== "") {
+                    html += `  <div class="col-6">
                             <div class="speaker-box">
                                 <i class="fas fa-microphone-lines"></i>
                                 <div class="speaker-info">
@@ -297,8 +301,10 @@
                                     <span>${data.guest}</span>
                                 </div>
                             </div>
-                        </div>
-                    </div>`;
+                        </div>`;
+                }
+                
+                html += `</div>`; // إغلاق وسم الـ row g-2 بشكل سليم
             }
             
             document.getElementById('detailContent').innerHTML = html;
@@ -335,14 +341,11 @@
                     const data = workshopData[id];
                     const container = document.getElementById('regModalContent');
                     
-                    // هنا الحل الذكي: يقرأ من link، وإذا لم يجده يقرأ من whatsapp لتفادي الـ undefined
-                    const targetLink = data.link || data.whatsapp;
-
                     container.innerHTML = `
                         <div class="mb-3"><i class="fas fa-check-circle fa-4x text-success"></i></div>
                         <h5 class="fw-bold">تم تسجيلك بنجاح!</h5>
                         <p class="small text-muted">تمت إضافة الفعالية إلى أجندتك.</p>
-                        <a href="${targetLink}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: var(--primary-green); color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
+                        <a href="${data.whatsapp}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: var(--primary-green); color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
                              لتأكيد الحضور
                         </a>
                         <button type="button" class="btn btn-link text-muted mt-2" data-bs-dismiss="modal" style="text-decoration:none">إغلاق</button>
