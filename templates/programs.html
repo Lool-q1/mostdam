@@ -335,11 +335,14 @@
                     const data = workshopData[id];
                     const container = document.getElementById('regModalContent');
                     
+                    // هنا الحل الذكي: يقرأ من link، وإذا لم يجده يقرأ من whatsapp لتفادي الـ undefined
+                    const targetLink = data.link || data.whatsapp;
+
                     container.innerHTML = `
                         <div class="mb-3"><i class="fas fa-check-circle fa-4x text-success"></i></div>
                         <h5 class="fw-bold">تم تسجيلك بنجاح!</h5>
                         <p class="small text-muted">تمت إضافة الفعالية إلى أجندتك.</p>
-                        <a href="${data.whatsapp}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: var(--primary-green); color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
+                        <a href="${targetLink}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: var(--primary-green); color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
                              لتأكيد الحضور
                         </a>
                         <button type="button" class="btn btn-link text-muted mt-2" data-bs-dismiss="modal" style="text-decoration:none">إغلاق</button>
