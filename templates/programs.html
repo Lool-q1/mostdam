@@ -268,7 +268,6 @@
 
         window.onload = checkExpirations;
 
-        // 🟢 التعديل الصحيح والمحسّن لدالة التفاصيل هنا:
         function showDetails(id) {
             const data = workshopData[id];
             let html = `<h6 class="fw-bold mb-3" style="color: var(--primary-green); text-align: right;">محاور اللقاء:</h6>`;
@@ -277,7 +276,6 @@
                 html += `<div class="topic-item"><span>${topic}</span><i class="fas fa-check-circle text-success ms-2"></i></div>`;
             });
             
-            // الفحص الدقيق: لا يتم إنشاء خط الفصل أو صف البوتستراب إلا إذا وجد اسم مدرب فعلي
             if (data.trainer && data.trainer.trim() !== "") { 
                 html += `<hr class="my-4">
                     <div class="row g-2">
@@ -291,7 +289,6 @@
                             </div>
                         </div>`;
                 
-                // فحص صندوق ضيف اللقاء وبناؤه بشكل مستقل داخل نفس الصف
                 if (data.guest && data.guest.trim() !== "") {
                     html += `  <div class="col-6">
                             <div class="speaker-box">
@@ -304,7 +301,7 @@
                         </div>`;
                 }
                 
-                html += `</div>`; // إغلاق وسم الـ row g-2 بشكل سليم
+                html += `</div>`; 
             }
             
             document.getElementById('detailContent').innerHTML = html;
@@ -327,6 +324,7 @@
             new bootstrap.Modal(document.getElementById('registerModal')).show();
         }
 
+        // 🟢 الدالة المحدثة التي تحل مشكلة الرابط وتحديث الأجندة الرقمية
         function processRegistration(id, name) {
             const params = new URLSearchParams();
             params.append('event_id', id);
@@ -341,12 +339,17 @@
                     const data = workshopData[id];
                     const container = document.getElementById('regModalContent');
                     
+                    // تحديد الرابط المتوفر ديناميكياً (مجموعة الواتساب أو رابط الموقع الخارجي للفعالية)
+                    const targetLink = data.whatsapp || data.link || "#";
+                    // تغيير نص الزر ليتلاءم مع طبيعة الرابط
+                    const btnText = data.whatsapp ? "لتأكيد الحضور عبر الواتساب" : "الانتقال لرابط الفعالية";
+                    
                     container.innerHTML = `
                         <div class="mb-3"><i class="fas fa-check-circle fa-4x text-success"></i></div>
                         <h5 class="fw-bold">تم تسجيلك بنجاح!</h5>
-                        <p class="small text-muted">تمت إضافة الفعالية إلى أجندتك.</p>
-                        <a href="${data.whatsapp}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: var(--primary-green); color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
-                             لتأكيد الحضور
+                        <p class="small text-muted">تمت إضافة الفعالية إلى أجندتك بنجاح.</p>
+                        <a href="${targetLink}" target="_blank" class="btn w-100 py-3 mb-2" style="background-color: var(--primary-green); color: white; border-radius: 12px; font-weight: bold; text-decoration: none; display: block;">
+                             ${btnText}
                         </a>
                         <button type="button" class="btn btn-link text-muted mt-2" data-bs-dismiss="modal" style="text-decoration:none">إغلاق</button>
                     `;

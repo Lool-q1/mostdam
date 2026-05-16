@@ -16,7 +16,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'platform.db')
 
 def get_db_connection():
-    """دالة لفتح اتصال بقاعدة البيانات مع دعم الوصول للبيانات كقاموس"""
+    """فتح الاتصال مع تفعيل Row factory ليقرأ الـ HTML الحقول بأسمائها مباشرة"""
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     return conn
@@ -85,20 +85,25 @@ def init_db():
     conn.close()
 
 def seed_data():
-    """إدخال بيانات أولية لضمان عمل التسجيل في الفعاليات"""
+    """تحديث جدول الفعاليات بالتفاصيل الحقيقية ليقرأها الموقع تلقائياً"""
     conn = get_db_connection()
     cursor = conn.cursor()
-    # التحقق من وجود الفعالية برقم 1 لمنع التكرار
-    check = cursor.execute("SELECT id FROM events WHERE id=1").fetchone()
-    if not check:
-        # تأكدي أن تنسيق التاريخ هنا يطابق التنسيق المستخدم في دالة datetime.strptime
-        cursor.execute('''INSERT INTO events (id, title, description, date_time, location) 
-                          VALUES (?, ?, ?, ?, ?)''', 
-                       (1, 'الاستدامة المالية وبناء مستقبل اقتصادي', 'محاور ورشة الاستدامة المالية', '2026-05-13 19:00', 'عبر مساحة (X)'))
-        conn.commit()
+    
+    # الفعالية رقم 1 (ورشة الاستدامة المالية)
+    cursor.execute('''INSERT INTO events (id, title, description, date_time, location) 
+                      VALUES (1, 'الاستدامة المالية وبناء مستقبل اقتصادي', 'محاور ورشة الاستدامة المالية', '2026-05-13 19:00', 'عبر مساحة (X)')
+                      ON CONFLICT(id) DO UPDATE SET 
+                      title=excluded.title, description=excluded.description, date_time=excluded.date_time, location=excluded.location''')
+        
+    # الفعالية رقم 2 (الحفل الختامي) - تم تحديث الموعد الحقيقي والموقع الفعلي
+    cursor.execute('''INSERT INTO events (id, title, description, date_time, location) 
+                      VALUES (2, 'الأمسية الاستثنائية والحفل الختامي لمبادرة مستدام', 'فعاليات الحفل الختامي وتكريم المشاركين', '2026-05-18 16:00', 'غرفة أبها التجارية')
+                      ON CONFLICT(id) DO UPDATE SET 
+                      title=excluded.title, description=excluded.description, date_time=excluded.date_time, location=excluded.location''')
+        
+    conn.commit()
     conn.close()
 
-# تهيئة القاعدة والبيانات
 init_db()
 seed_data()
 
@@ -219,7 +224,6 @@ def register_event():
     conn = get_db_connection()
     cursor = conn.cursor()
     
-    # التأكد من وجود الفعالية أولاً قبل تسجيل المستخدم فيها
     event_exists = cursor.execute("SELECT id FROM events WHERE id=?", (event_id,)).fetchone()
     existing_reg = cursor.execute("SELECT id FROM event_registrations WHERE user_id=? AND event_id=?", 
                                   (user_id, event_id)).fetchone()
@@ -241,34 +245,31 @@ def profile():
     cursor = conn.cursor()
     
     user_info = cursor.execute("SELECT * FROM users WHERE id=?", (user_id,)).fetchone()
-    orders = cursor.execute("SELECT product_name, amount, order_date, status FROM orders WHERE user_id=?", (user_id,)).fetchall()
+    orders = cursor.execute("SELECT * FROM orders WHERE user_id=?", (user_id,)).fetchall()
     
-    # جلب كل الفعاليات المسجلة بربط الجداول
+    # جلب الفعاليات المسجلة باسم الحقل لتعود نظيفة وتُعرض بأسمائها الأصلية في الـ HTML تلقائياً
     all_events = cursor.execute('''SELECT e.title, e.date_time, e.location 
-                                  FROM events e 
-                                  JOIN event_registrations r ON e.id = r.event_id 
-                                  WHERE r.user_id=?''', (user_id,)).fetchall()
+                                   FROM events e 
+                                   INNER JOIN event_registrations r ON e.id = r.event_id 
+                                   WHERE r.user_id=?''', (user_id,)).fetchall()
     
     now = datetime.now()
-    agenda = []         # الأجندة القادمة
-    past_agenda = []    # الأجندة السابقة
+    agenda = []         
+    past_agenda = []    
     
     for event in all_events:
         try:
-            raw_date = event['date_time']
+            raw_date = event['date_time'] # القراءة دايركت باسم الحقل
             if raw_date:
-                # محاولة تحويل التاريخ (التنسيق المتوقع: 2026-05-13 19:00)
                 event_time = datetime.strptime(raw_date, '%Y-%m-%d %H:%M')
                 if event_time > now:
                     agenda.append(event)
                 else:
                     past_agenda.append(event)
             else:
-                # إذا لم يوجد تاريخ، نضعها في الأجندة القادمة لضمان ظهورها
                 agenda.append(event)
         except Exception as e:
-            # في حال وجود خطأ في التنسيق تظهر في الأجندة كاحتياط ويتم طباعة الخطأ للديبرج
-            print(f"Error parsing date for event {event['title']}: {e}")
+            print(f"Error parsing date: {e}")
             agenda.append(event)
 
     conn.close()
